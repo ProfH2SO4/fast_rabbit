@@ -1,3 +1,5 @@
+import asyncio
+
 from fastapi import FastAPI
 
 from os.path import isfile
@@ -5,6 +7,7 @@ from types import ModuleType
 
 import config
 from . import log
+from .consumer import Consumer
 
 __version__ = "0.0.1"
 __started_at__ = "2023-02-25T20:00:00"
@@ -29,6 +32,18 @@ def load_config() -> ModuleType:
     return app_config
 
 
+def parse_namespace(namespace: str, config: ModuleType) -> dict[str, any]:
+    """
+    Parse namespace to list.
+    """
+    parsed: dict[str, any] = {}
+    for key, value in config.__dict__.items():
+        if namespace in key:
+            temp = key.split(namespace)
+            parsed[temp[1].lower()] = value
+    return parsed
+
+
 class FastRabbit(FastAPI):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -40,9 +55,14 @@ class FastRabbit(FastAPI):
         print("============ Setting Up Logger ============")
         log.set_up_logger(config.LOG_CONFIG)
         print("===========Logger is set up============")
-
+        self.consumer_: Consumer = Consumer(**parse_namespace("RABBITMQ_", self.config))
+        asyncio.run(self.start())
         log.info("==== FastRabbit is running ========")
         print("==== FastRabbit is running ========")
+
+    async def start(self):
+        await self.consumer_.configure()
+        self.consumer_.start()
 
 
 fast_rabbit = FastRabbit()

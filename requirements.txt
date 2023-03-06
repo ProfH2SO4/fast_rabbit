@@ -1,4 +1,5 @@
 fastapi >= 0.9
-rabbitmq-client >= 2.0
+aio-pika==9.*
+uvloop>=0.14
 pre-commit
 uvicorn >= 0.2
