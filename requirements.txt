@@ -1,5 +1,8 @@
-fastapi >= 0.9
-aio-pika==9.*
+pip>=20
+aio-pika>=9
+urllib3==1.*
 uvloop>=0.14
 pre-commit
-uvicorn >= 0.2
+uvicorn>=0.2
+inspect-it>=0.3
+aiohttp>=3.7

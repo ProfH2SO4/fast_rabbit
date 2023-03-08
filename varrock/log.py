@@ -5,7 +5,7 @@ LOGGER_NAME: str = "default"
 
 
 def set_up_logger(log_config: dict) -> None:
-    """ " Set up the logger."""
+    """Set up the logger."""
     dictConfig(log_config)
     logger = logging.getLogger(LOGGER_NAME)
     logger.info("Logger is set up")

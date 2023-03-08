@@ -1,6 +1,6 @@
-from fast_rabbit import fast_rabbit
-from uvicorn import run
+import asyncio
+from varrock import start_running
 
 
 if __name__ == "__main__":
-    run(fast_rabbit, host="0.0.0.0", port=8000)
+    asyncio.run(start_running())
