@@ -3,7 +3,7 @@ from varrock.enums import RequestStatus
 from varrock.proxy_ import LocalProxy
 
 
-class Storage:  # simulates a client for storing data
+class Depositor:  # simulates a client for storing data
     def __init__(self, url: str, timeout: int, max_retries: int, *args, **kwargs):
         self.url = url
         self.timeout = timeout
@@ -26,5 +26,5 @@ class Storage:  # simulates a client for storing data
         pass
 
 
-storage_proxy: LocalProxy = LocalProxy(Storage)
-storage_client: Storage = storage_proxy.fake_class_proxy()
+storage_proxy: LocalProxy = LocalProxy(Depositor)
+storage_client: Depositor = storage_proxy.fake_class_proxy()
