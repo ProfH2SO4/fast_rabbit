@@ -8,7 +8,7 @@ def set_up_logger(log_config: dict) -> None:
     """Set up the logger."""
     dictConfig(log_config)
     logger = logging.getLogger(LOGGER_NAME)
-    logger.info("Logger is set up")
+    logger.info("Logger, Status: Ready ")
 
     return None
 

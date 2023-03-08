@@ -7,7 +7,7 @@ class Depositor:  # simulates a client for storing data
     def __init__(self, url: str, timeout: int, max_retries: int, *args, **kwargs):
         self.url = url
         self.timeout = timeout
-        self.num_retries = max_retries
+        self.max_retries = max_retries
 
     def is_available(self) -> None:
         """
@@ -18,7 +18,7 @@ class Depositor:  # simulates a client for storing data
 
     async def send_user(self, data: dict[str, any]) -> RequestStatus:
         """Send user data to storage server."""
-        print(self.url, self.timeout, self.num_retries)
+        print(self.url, self.timeout, self.max_retries)
         return RequestStatus.OK
 
     async def send_measurement(self, data: dict[str, any]) -> None:

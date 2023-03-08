@@ -21,7 +21,7 @@ def load_config() -> ModuleType:
     If exists config.py in /etc/varrock/ then overrides parameters in local config.py.
     """
     app_config: ModuleType = config
-    path: str = "/etc/fast_rabbit/config.py"
+    path: str = "/etc/varrock/config.py"
 
     if not isfile(path):
         return app_config
@@ -51,20 +51,20 @@ async def start_running():
     version: str = __version__
     started_at: str = __started_at__
     # Load Config
-    config: ModuleType = load_config()
+    config_: ModuleType = load_config()
     # Initialize Logger
     print("============ Setting Up Logger ============")
-    log.set_up_logger(config.LOG_CONFIG)
-    print("===========Logger is set up============")
-    # +++++++++++++++STORAGE CLIENT++++++++++++++++++++++++++++++
-    log.info("Setting Up Storage Client")
-    print("============ Setting Up Storage Client ============")
-    storage_proxy.set_up_proxy_object(**parse_namespace("STORAGE_", config))
-    log.info("Storage Client is set up")
-    print("===========Storage Client is set up============")
-    # +++++++++++++++STORAGE CLIENT++++++END+++++++++++++++++++++
+    log.set_up_logger(config_.LOG_CONFIG)
+    print("===========Logger, Status: Ready ============")
+    # +++++++++++++++DEPOSITOR CLIENT++++++++++++++++++++++++++++++
+    log.info("Setting Up Depositor Client")
+    print("============ Setting Up Depositor Client ============")
+    storage_proxy.set_up_proxy_object(**parse_namespace("STORAGE_", config_))
+    log.info("Depositor Client, Status: Ready")
+    print("===========Depositor Client, Status: Ready============")
+    # +++++++++++++++DEPOSITOR CLIENT++++++END+++++++++++++++++++++
 
-    consumer_: Consumer = Consumer(**parse_namespace("RABBITMQ_", config))
+    consumer_: Consumer = Consumer(**parse_namespace("RABBITMQ_", config_))
     uv_loop: uvloop.Loop = uvloop.new_event_loop()
     asyncio.set_event_loop(uv_loop)
 

@@ -99,8 +99,8 @@ class Consumer:
             await message.reject(requeue=True)
 
     async def start_to_consume(self):
-        print("==== FastRabbit is consuming ========")
-        log.info("==== FastRabbit is consuming ========")
+        print("Varrock is consuming")
+        log.info("Varrock is consuming")
         res = await self.queue.consume(self.process_message)
         try:
             # Wait until terminate

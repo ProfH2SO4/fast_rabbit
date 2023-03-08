@@ -1,4 +1,4 @@
-# fast_rabbit
+# Varrock
 
 Varrock is an asynchronous consumer of messages from a RabbitMQ queue.
 His purpose is to process the messages and send them to the appropriate destination.
