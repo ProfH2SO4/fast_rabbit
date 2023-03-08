@@ -10,8 +10,8 @@ RabbitMQ 3.* <br>
 ## Installation
 1. Create virtual environment
 ```
-python3.10 -m venv venv
-source venv/bin/activate
+python3.10 -m venv venv_varrock
+source venv_varrock/bin/activate
 ```
 2. Install requirements
 ```
