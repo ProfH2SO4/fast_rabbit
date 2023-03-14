@@ -2,11 +2,11 @@ import aio_pika, asyncio, json
 from aio_pika import exceptions
 from aio_pika import RobustConnection, RobustChannel, RobustQueue, RobustExchange
 from aiormq import spec
-
+from typing import Coroutine
 
 from varrock import log
 from varrock.enums import RequestStatus
-from .depositor import storage_client
+from .depositor import depositor_client
 
 
 class Consumer:
@@ -37,8 +37,16 @@ class Consumer:
         await self.create_channel()
         await self.create_exchange()
         await self.queue_declare()
+        await self.bind_keys()
+
+    async def bind_keys(self) -> None:
+        """
+        Bind routing keys to queue.
+        """
+        tasks: list[Coroutine] = []
         for routing_key in self._routing_keys:
-            await self.queue_bind(routing_key)
+            tasks.append(self.queue_bind(routing_key))
+        await asyncio.gather(*tasks)
 
     async def create_connection(self) -> None:
         """Create connection to RabbitMQ"""
@@ -91,7 +99,7 @@ class Consumer:
             await message.reject(requeue=False)
             return
         if self.is_users_message(message.routing_key):
-            delivery_status = await storage_client.send_user(body)
+            delivery_status = await depositor_client.send_user(body)
 
         if delivery_status == RequestStatus.OK:
             await message.ack()

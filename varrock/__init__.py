@@ -8,7 +8,7 @@ from types import ModuleType
 import config
 from . import log
 
-from varrock.clients.depositor import storage_proxy, storage_client
+from varrock.clients.depositor import depositor_proxy, depositor_client
 from varrock.clients.consumer import Consumer
 
 __version__ = "0.0.1"
@@ -59,7 +59,7 @@ async def start_running():
     # +++++++++++++++DEPOSITOR CLIENT++++++++++++++++++++++++++++++
     log.info("Setting Up Depositor Client")
     print("============ Setting Up Depositor Client ============")
-    storage_proxy.set_up_proxy_object(**parse_namespace("STORAGE_", config_))
+    depositor_proxy.set_up_proxy_object(**parse_namespace("DEPOSITOR_", config_))
     log.info("Depositor Client, Status: Ready")
     print("===========Depositor Client, Status: Ready============")
     # +++++++++++++++DEPOSITOR CLIENT++++++END+++++++++++++++++++++
