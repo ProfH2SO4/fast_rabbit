@@ -62,6 +62,10 @@ async def start_running():
     depositor_proxy.set_up_proxy_object(**parse_namespace("DEPOSITOR_", config_))
     log.info("Depositor Client, Status: Ready")
     print("===========Depositor Client, Status: Ready============")
+    # check ping
+    is_ok: bool = await depositor_client.is_available()
+    if not is_ok:
+        log.warning("Depositor Client is not available")
     # +++++++++++++++DEPOSITOR CLIENT++++++END+++++++++++++++++++++
 
     consumer_: Consumer = Consumer(**parse_namespace("RABBITMQ_", config_))
