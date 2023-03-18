@@ -1,6 +1,6 @@
 from aiohttp import ClientSession, ClientTimeout, ClientResponse
 from aiohttp_retry import RetryClient
-from varrock.enums import RequestStatus
+from varrock.enum_ import RequestStatus
 
 from varrock.proxy_ import LocalProxy
 from varrock import log

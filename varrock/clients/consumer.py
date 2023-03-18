@@ -5,7 +5,7 @@ from aiormq import spec
 from typing import Coroutine
 
 from varrock import log
-from varrock.enums import RequestStatus
+from varrock.enum_ import RequestStatus
 from .depositor import depositor_client
 
 
