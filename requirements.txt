@@ -6,3 +6,4 @@ pre-commit
 uvicorn>=0.2
 inspect-it>=0.3
 aiohttp>=3.7
+aiohttp-retry>=2.0

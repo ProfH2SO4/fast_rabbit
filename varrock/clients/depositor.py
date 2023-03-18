@@ -1,5 +1,5 @@
 from aiohttp import ClientSession, ClientTimeout, ClientResponse
-
+from aiohttp_retry import RetryClient
 from varrock.enums import RequestStatus
 
 from varrock.proxy_ import LocalProxy
@@ -7,7 +7,9 @@ from varrock import log
 
 
 class AioSession(ClientSession):
-    def __init__(self, read_timeout: int, conn_timeout: int, *args, **kwargs):
+    def __init__(
+        self, read_timeout: int, conn_timeout: int, max_retries: int, *args, **kwargs
+    ):
         super().__init__(
             timeout=ClientTimeout(
                 total=read_timeout + conn_timeout,
@@ -17,10 +19,12 @@ class AioSession(ClientSession):
             *args,
             **kwargs,
         )
+        self.max_retries = max_retries
+        self.retry_client: RetryClient = RetryClient(self, max_retries=max_retries)
 
     async def request_async(self, method: str, url: str, **kwargs) -> ClientResponse:
         log.debug(f"Start request to {url} with method {method} and kwargs {kwargs}")
-        async with self.request(method, url, **kwargs) as response:
+        async with self.retry_client.request(method, url, **kwargs) as response:
             try:
                 response_json = await response.json()
                 log.debug(f"End Response: {response_json}")
@@ -49,7 +53,7 @@ class Depositor:  # simulates a client for storing data
 
     @property
     def aio_session(self) -> AioSession:
-        aio_session = AioSession(self.read_timeout, self.conn_timeout)
+        aio_session = AioSession(self.read_timeout, self.conn_timeout, self.max_retries)
         return aio_session
 
     async def is_available(self) -> bool:
@@ -65,7 +69,6 @@ class Depositor:  # simulates a client for storing data
 
     async def send_user(self, data: dict[str, any]) -> RequestStatus:
         """Send user data to storage server."""
-        print(self.url, self.timeout, self.max_retries)
         return RequestStatus.OK
 
     async def send_measurement(self, data: dict[str, any]) -> RequestStatus:
